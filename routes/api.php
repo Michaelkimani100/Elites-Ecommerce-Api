@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'Api\PassportController@login');
 Route::post('register', 'Api\PassportController@register');
 Route::apiResources(['category' => 'Api\CategoryController']);
+Route::apiResources(['product' => 'Api\ProductController']);
