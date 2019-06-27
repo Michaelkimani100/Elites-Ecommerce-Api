@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Product;
+use App\Category;
 
 class ProductController extends Controller
 {
@@ -68,7 +69,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
 
     }
 

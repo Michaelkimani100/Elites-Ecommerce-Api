@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Category;
-class CategoryController extends Controller
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use App\Image;
+
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories=Category::latest()->get();
-        return response()->json($categories);
+        //
     }
 
     /**
@@ -26,16 +28,25 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            'name' => 'required',
-            'description' => 'required'
+        $rules=array(
+            'product_id' => 'required',
+            'image' => 'required'
         );
         $this->validate($request,$rules);
-        $cat=Category::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description')
+        $file=$request->file('image');
+        $extension=$file->getClientOriginalExtension();
+        Storage::disk('public')->put($file->getFilename().'.'.$extension,  File::get($file));
+        $image=Image::create([
+            'product_id' => $request->input('product_id'),
+            'image' => $file,
+            'mine' =>$file->getClientMimeType(),
+            'filename' =>$file->getFilename().'.'.$extension,
+            'original_filename' =>$file->getClientOriginalName()
         ]);
-        return response()->json($cat);
+        return response()->json($image);
+
+
+
     }
 
     /**
@@ -46,8 +57,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $product=Category::with('products')->findOrFail($id);
-        return response()->json($product);
+        //
     }
 
     /**
