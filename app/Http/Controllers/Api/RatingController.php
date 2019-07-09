@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Rating;
 use App\Product;
-use App\Category;
+use App\User;
 
-class ProductController extends Controller
+class RatingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products=Product::with('category')->with('images')->latest()->get();
-        return response()->json($products);
+
     }
 
     /**
@@ -28,24 +28,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            'name' => 'required',
-            'category_id' => 'required',
-            'price' => 'required',
-            'features' => 'required',
-            'description' => 'required',
-            'company' => 'required'
+        $rules=array(
+            'product_id' =>'required',
+            'user_id' => 'required',
+            'rating' => 'required',
+            'comment' =>'required'
         );
-         $this->validate($request,$rules);
-        $product=Product::create([
-            'category_id' => $request->input('category_id'),
-            'name' => $request->input('name'),
-            'company' => $request->input('company'),
-            'price' => $request->input('price'),
-            'features' => $request->input('features'),
-            'description' =>$request->input('description')
+        $this->validate($request,$rules);
+        $rating=Rating::create([
+            'product_id' => $request->input('product_id'),
+            'user_id' => $request->input('user_id'),
+            'rating' =>$request->input('rating'),
+            'comment' =>$request->input('comment')
         ]);
-        return response()->json($product);
+        return response()->json($rating);
     }
 
     /**
@@ -56,8 +52,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product=Product::with('category')->with('images')->findOrFail($id);
-        return response()->json($product);
+        //
     }
 
     /**
@@ -69,8 +64,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-
+        //
     }
 
     /**
@@ -81,7 +75,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product=Product::findOrFail();
-        $product->delete();
+        //
     }
 }

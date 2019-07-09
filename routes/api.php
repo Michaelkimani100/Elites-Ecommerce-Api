@@ -22,3 +22,4 @@ Route::post('register', 'Api\PassportController@register');
 Route::apiResources(['category' => 'Api\CategoryController']);
 Route::apiResources(['product' => 'Api\ProductController']);
 Route::apiResources(['image' => 'Api\ImageController']);
+Route::apiResources(['rating' => 'Api\RatingController']);

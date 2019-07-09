@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Image;
+use App\Product;
 
 class ImageController extends Controller
 {
@@ -17,7 +18,7 @@ class ImageController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -35,10 +36,14 @@ class ImageController extends Controller
         $this->validate($request,$rules);
         $file=$request->file('image');
         $extension=$file->getClientOriginalExtension();
-        Storage::disk('public')->put($file->getFilename().'.'.$extension,  File::get($file));
+        $path=Storage::disk('public')->put($file->getFilename().'.'.$extension,  File::get($file));
+
+        //$url = Storage::url($path);
+         $url=Storage::download($file);
+        // $path1= response()->download($path);
         $image=Image::create([
             'product_id' => $request->input('product_id'),
-            'image' => $file,
+            'image' => $url,
             'mine' =>$file->getClientMimeType(),
             'filename' =>$file->getFilename().'.'.$extension,
             'original_filename' =>$file->getClientOriginalName()
@@ -57,7 +62,8 @@ class ImageController extends Controller
      */
     public function show($id)
     {
-        //
+        $product=Product::with('images')->findOrFail($id);
+        return response()->json($product);
     }
 
     /**
